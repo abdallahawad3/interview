@@ -12,7 +12,16 @@ interface Props<T> {
 
 function DataGridRowInner<T>({ row, id, columns, selected, onToggle }: Props<T>) {
   return (
-    <TableRow hover selected={selected} onClick={() => onToggle(id)} sx={{ cursor: "pointer" }}>
+    <TableRow
+      hover
+      selected={selected}
+      onClick={() => onToggle(id)}
+      sx={{
+        cursor: "pointer",
+        backgroundColor: selected ? "rgba(79, 70, 229, 0.04)" : undefined,
+        "&:hover": { backgroundColor: "rgba(79, 70, 229, 0.03)" },
+      }}
+    >
       <TableCell padding="checkbox">
         <Checkbox
           checked={selected}
@@ -23,7 +32,14 @@ function DataGridRowInner<T>({ row, id, columns, selected, onToggle }: Props<T>)
       </TableCell>
 
       {columns.map((col) => (
-        <TableCell key={col.id} sx={{ minWidth: col.minWidth, whiteSpace: "nowrap" }}>
+        <TableCell
+          key={col.id}
+          sx={{
+            minWidth: col.minWidth,
+            whiteSpace: "nowrap",
+            borderBottom: "1px solid rgba(148, 163, 184, 0.12)",
+          }}
+        >
           {col.render ? col.render(row) : col.value(row)}
         </TableCell>
       ))}

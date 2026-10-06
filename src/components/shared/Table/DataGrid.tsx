@@ -200,43 +200,77 @@ export function DataGrid<T>({
   }
 
   return (
-    <Paper variant="outlined" sx={{ direction: "rtl" }}>
+    <Paper
+      variant="outlined"
+      sx={{
+        direction: "rtl",
+        borderRadius: 1,
+        overflow: "hidden",
+        border: "1px solid rgba(148, 163, 184, 0.2)",
+        boxShadow: "0 24px 48px rgba(15, 23, 42, 0.08)",
+      }}
+    >
       <Toolbar
         sx={{
           gap: 1,
           flexWrap: "wrap",
-          py: 1.5,
-          mb: 1,
-          border: "1px solid #e0e0e0",
+          py: 2,
+          px: 2.5,
+          borderBottom: "1px solid rgba(148, 163, 184, 0.18)",
+          background: "linear-gradient(135deg, #f8faff 0%, #eef2ff 100%)",
         }}
       >
         {title && (
-          <Typography variant="h6" sx={{ mr: "auto" }}>
+          <Typography variant="h5" sx={{ mr: "auto", fontWeight: 800, color: "#0f172a" }}>
             {title}
           </Typography>
         )}
         {selected.size > 0 && (
-          <Typography variant="body2" color="primary">
-            {selected.size} selected
+          <Typography
+            variant="body2"
+            sx={{
+              px: 1.25,
+              py: 0.5,
+              borderRadius: 999,
+              backgroundColor: "rgba(79, 70, 229, 0.1)",
+              color: "primary.main",
+              fontWeight: 700,
+            }}
+          >
+            {selected.size} محدد
           </Typography>
         )}
         <TextField
           size="small"
-          placeholder="Search name, username, email, phone, website"
+          placeholder="ابحث عن الاسم أو البريد أو الهاتف"
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
-          sx={{ width: { xs: "100%", sm: 360 } }}
+          sx={{
+            width: { xs: "100%", sm: 360 },
+            "& .MuiOutlinedInput-root": {
+              borderRadius: 3,
+              backgroundColor: "#fff",
+            },
+          }}
           slotProps={{
             input: {
               startAdornment: (
                 <InputAdornment position="start">
-                  <SearchIcon fontSize="small" />
+                  <SearchIcon fontSize="small" color="action" />
                 </InputAdornment>
               ),
             },
           }}
         />
-        <IconButton aria-label="Toggle filters" onClick={() => setShowFilters((s) => !s)}>
+        <IconButton
+          aria-label="Toggle filters"
+          onClick={() => setShowFilters((s) => !s)}
+          sx={{
+            border: "1px solid rgba(148, 163, 184, 0.25)",
+            backgroundColor: "#fff",
+            color: "primary.main",
+          }}
+        >
           <Badge badgeContent={activeFilterCount} color="primary">
             <FilterListIcon />
           </Badge>
@@ -244,7 +278,7 @@ export function DataGrid<T>({
       </Toolbar>
 
       <Collapse in={showFilters}>
-        <Box sx={{ px: 2, pb: 2 }}>
+        <Box sx={{ px: 2.5, py: 2, backgroundColor: "rgba(248,250,252,0.8)" }}>
           <Grid container spacing={2} key={filtersKey}>
             {filterableColumns.map((col) => (
               <Grid key={col.id} size={{ xs: 12, md: 6, lg: 4 }}>
@@ -259,7 +293,7 @@ export function DataGrid<T>({
           </Grid>
           <Button
             size="small"
-            sx={{ mt: 1 }}
+            sx={{ mt: 1.5, borderRadius: 2 }}
             disabled={activeFilterCount === 0}
             onClick={handleClearFilters}
           >
@@ -272,7 +306,7 @@ export function DataGrid<T>({
         <Table stickyHeader size="small">
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox">
+              <TableCell padding="checkbox" sx={{ bgcolor: "#eef2ff" }}>
                 <Checkbox
                   checked={allSelected}
                   indeterminate={someSelected}
@@ -281,7 +315,15 @@ export function DataGrid<T>({
                 />
               </TableCell>
               {columns.map((col) => (
-                <TableCell key={col.id} sx={{ fontWeight: 600, whiteSpace: "nowrap" }}>
+                <TableCell
+                  key={col.id}
+                  sx={{
+                    fontWeight: 700,
+                    whiteSpace: "nowrap",
+                    backgroundColor: "#eef2ff",
+                    color: "#1e293b",
+                  }}
+                >
                   {col.header}
                 </TableCell>
               ))}
@@ -299,6 +341,10 @@ export function DataGrid<T>({
         rowsPerPageOptions={PAGE_SIZES}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handlePageSizeChange}
+        sx={{
+          borderTop: "1px solid rgba(148, 163, 184, 0.18)",
+          backgroundColor: "rgba(248,250,252,0.8)",
+        }}
       />
     </Paper>
   );

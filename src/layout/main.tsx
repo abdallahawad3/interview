@@ -12,12 +12,13 @@ const MainLayout = () => {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const isMini = isSmallScreen || !open;
   const currentDrawerWidth = isMini ? miniDrawerWidth : drawerWidth;
+
   const handleDrawer = () => {
     setOpen((prev) => !prev);
   };
 
   return (
-    <Box>
+    <Box sx={{ minHeight: "100vh", background: "linear-gradient(180deg, #eff4ff 0%, #f8fafc 100%)" }}>
       <Sidebar open={open} drawerWidth={drawerWidth} handleDrawer={handleDrawer} />
 
       <Box
@@ -25,14 +26,12 @@ const MainLayout = () => {
         sx={{
           width: `calc(100% - ${currentDrawerWidth}px)`,
           marginRight: `${currentDrawerWidth}px`,
-
           minWidth: 0,
-
           transition: "margin-right 225ms ease, width 225ms ease",
-
           minHeight: "100vh",
           mt: "80px",
-          padding: 2,
+          px: { xs: 1.5, sm: 2.5, md: 3 },
+          py: 3,
         }}
       >
         <Users />
@@ -40,4 +39,5 @@ const MainLayout = () => {
     </Box>
   );
 };
+
 export default MainLayout;

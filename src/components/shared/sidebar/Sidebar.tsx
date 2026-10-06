@@ -18,14 +18,11 @@ import { Typography, useMediaQuery, useTheme } from "@mui/material";
 import { DrawerHeader } from "./SidebarHeader";
 import PeopleIcon from "@mui/icons-material/People";
 import MainHeader from "../MainHeader/MainHeader";
+
 function Sidebar({ drawerWidth, handleDrawer, open }: SidebarProps) {
   const theme = useTheme();
-
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
-
-  // Mobile أو Sidebar مقفول → mini width
   const isMini = isSmallScreen || !open;
-
   const sidebarWidth = isMini ? 72 : drawerWidth;
 
   return (
@@ -39,11 +36,9 @@ function Sidebar({ drawerWidth, handleDrawer, open }: SidebarProps) {
         sx={{
           width: sidebarWidth,
           flexShrink: 0,
-
           "& .MuiDrawer-paper": {
             width: sidebarWidth,
             boxSizing: "border-box",
-
             transition: theme.transitions.create("width", {
               easing: theme.transitions.easing.sharp,
               duration: theme.transitions.duration.standard,
@@ -52,86 +47,88 @@ function Sidebar({ drawerWidth, handleDrawer, open }: SidebarProps) {
         }}
         anchor="right"
       >
-        <DrawerHeader>
+        <DrawerHeader sx={{ px: 2, py: 1.5, borderBottom: "1px solid rgba(148,163,184,0.14)" }}>
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
-
-              justifyContent: isMini ? "center" : "flex-start",
-
-              gap: 1,
+              justifyContent: isMini ? "center" : "space-between",
               width: "100%",
+              gap: 1.5,
             }}
           >
-            {/* Logo Text */}
             {!isMini && (
-              <Typography
-                sx={{
-                  fontSize: "18px",
-                  fontWeight: 700,
-                }}
-              >
-                Logo
-              </Typography>
+              <Box>
+                <Typography variant="subtitle2" sx={{ color: "rgba(255,255,255,0.7)", fontWeight: 700 }}>
+                  إدارة
+                </Typography>
+                <Typography sx={{ color: "#fff", fontWeight: 800, fontSize: 18 }}>
+                  Atlas
+                </Typography>
+              </Box>
             )}
 
-            {/* Logo Icon */}
-            <Box component="img" src="./favicon.svg" width={40} />
+            <Box
+              sx={{
+                width: 42,
+                height: 42,
+                borderRadius: 2,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "linear-gradient(135deg, #a5b4fc 0%, #4f46e5 100%)",
+                boxShadow: "0 12px 24px rgba(79, 70, 229, 0.35)",
+                color: "#fff",
+                fontWeight: 800,
+              }}
+            >
+              A
+            </Box>
           </Box>
         </DrawerHeader>
 
-        <Divider />
+        <Divider sx={{ borderColor: "rgba(148,163,184,0.18)" }} />
 
-        <List>
-          {["المستخدمين"].map((text) => (
-            <ListItem
-              key={text}
-              disablePadding
-              sx={{
-                direction: "rtl",
-                borderRadius: "8px",
-
-                transition: "background .2s",
-
-                "&:hover": {
-                  backgroundColor: "accent.light",
-                  cursor: "pointer",
-                },
-              }}
-            >
+        <List sx={{ px: 1.5, py: 2 }}>
+          {[
+            { text: "المستخدمين", active: true },
+            { text: "الملف الشخصي" },
+            { text: "الإعدادات" },
+          ].map(({ text, active }) => (
+            <ListItem key={text} disablePadding sx={{ mb: 1, direction: "rtl" }}>
               <ListItemButton
                 sx={{
                   justifyContent: isMini ? "center" : "initial",
-
-                  minHeight: 48,
-
+                  minHeight: 52,
                   px: isMini ? 1 : 2,
+                  borderRadius: 3,
+                  backgroundColor: active ? "rgba(79, 70, 229, 0.18)" : "transparent",
+                  border: active ? "1px solid rgba(165, 180, 252, 0.45)" : "1px solid transparent",
+                  color: active ? "#fff" : "rgba(226,232,240,0.8)",
+                  "&:hover": {
+                    backgroundColor: "rgba(148, 163, 184, 0.12)",
+                  },
                 }}
               >
                 <ListItemIcon
                   sx={{
-                    minWidth: isMini ? 0 : 56,
-
+                    minWidth: isMini ? 0 : 48,
                     justifyContent: "center",
+                    color: active ? "#a5b4fc" : "rgba(226,232,240,0.8)",
                   }}
                 >
-                  <PeopleIcon sx={{ color: "primary.main" }} />
+                  <PeopleIcon />
                 </ListItemIcon>
 
-                {/* Menu Text */}
                 {!isMini && (
                   <ListItemText
-                    sx={{
-                      direction: "rtl",
-                      textAlign: "start",
-                    }}
+                    sx={{ margin: 0, direction: "rtl", textAlign: "start" }}
                     slotProps={{
                       primary: {
                         sx: {
-                          fontSize: "18px",
+                          fontSize: "16px",
                           fontWeight: 700,
-                          color: "primary.main",
+                          color: active ? "#fff" : "rgba(226,232,240,0.9)",
                         },
                       },
                     }}
