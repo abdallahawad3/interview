@@ -217,7 +217,6 @@ export function DataGrid<T>({
           py: 2,
           px: 2.5,
           borderBottom: "1px solid rgba(148, 163, 184, 0.18)",
-          background: "linear-gradient(135deg, #f8faff 0%, #eef2ff 100%)",
         }}
       >
         {title && (

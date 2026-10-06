@@ -18,7 +18,7 @@ const MainLayout = () => {
   };
 
   return (
-    <Box sx={{ minHeight: "100vh", background: "linear-gradient(180deg, #eff4ff 0%, #f8fafc 100%)" }}>
+    <Box sx={{ minHeight: "100vh" }}>
       <Sidebar open={open} drawerWidth={drawerWidth} handleDrawer={handleDrawer} />
 
       <Box

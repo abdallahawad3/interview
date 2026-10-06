@@ -59,12 +59,13 @@ function Sidebar({ drawerWidth, handleDrawer, open }: SidebarProps) {
           >
             {!isMini && (
               <Box>
-                <Typography variant="subtitle2" sx={{ color: "rgba(255,255,255,0.7)", fontWeight: 700 }}>
+                <Typography
+                  variant="subtitle2"
+                  sx={{ color: "rgba(255,255,255,0.7)", fontWeight: 700 }}
+                >
                   إدارة
                 </Typography>
-                <Typography sx={{ color: "#fff", fontWeight: 800, fontSize: 18 }}>
-                  Atlas
-                </Typography>
+                <Typography sx={{ color: "#fff", fontWeight: 800, fontSize: 18 }}>Atlas</Typography>
               </Box>
             )}
 
@@ -76,7 +77,7 @@ function Sidebar({ drawerWidth, handleDrawer, open }: SidebarProps) {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                background: "linear-gradient(135deg, #a5b4fc 0%, #4f46e5 100%)",
+
                 boxShadow: "0 12px 24px rgba(79, 70, 229, 0.35)",
                 color: "#fff",
                 fontWeight: 800,

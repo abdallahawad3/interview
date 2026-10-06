@@ -32,7 +32,6 @@ const MainHeader = ({ drawerWidth, handleDrawerOpen, open }: IProps) => {
       position="fixed"
       open={open}
       sx={{
-        background: "linear-gradient(135deg, #4f46e5 0%, #4338ca 50%, #312e81 100%)",
         borderBottom: "1px solid rgba(255,255,255,0.1)",
       }}
     >

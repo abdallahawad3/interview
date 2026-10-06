@@ -57,6 +57,7 @@ export const theme = createTheme({
     MuiAppBar: {
       styleOverrides: {
         root: {
+          background: "#000",
           boxShadow: "0 10px 30px rgba(15, 23, 42, 0.12)",
           borderBottom: "1px solid rgba(148, 163, 184, 0.18)",
         },
@@ -65,7 +66,7 @@ export const theme = createTheme({
     MuiDrawer: {
       styleOverrides: {
         paper: {
-          background: "linear-gradient(180deg, #0f172a 0%, #111827 100%)",
+          background: "#1d4ed8",
           border: "none",
           boxShadow: "12px 0 32px rgba(15, 23, 42, 0.18)",
         },
@@ -74,7 +75,6 @@ export const theme = createTheme({
     MuiTableCell: {
       styleOverrides: {
         head: {
-          backgroundColor: "#eef2ff",
           color: "#1e293b",
           fontWeight: 700,
         },

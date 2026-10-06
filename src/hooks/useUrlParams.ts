@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 
 type Patch = Record<string, string | null>;
 
-/** Keeps state in the URL search params (no router needed). */
 export function useUrlParams() {
   const [params, setParams] = useState(() => new URLSearchParams(window.location.search));
 
