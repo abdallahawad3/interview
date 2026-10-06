@@ -6,7 +6,10 @@ import { getUsers } from "../api/user";
 
 import { useDebounced } from "../hooks/useDebounced";
 import { type GridColDef, type GridPaginationModel } from "@mui/x-data-grid";
-
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { Box, IconButton, Tooltip } from "@mui/material";
 export default function Users() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -51,6 +54,18 @@ export default function Users() {
     return matchingUsers.map(transformUser);
   }, [debouncedSearch, users]);
 
+  const handleView = useCallback((user: UserRow) => {
+    console.log("View user:", user.id);
+  }, []);
+
+  const handleEdit = useCallback((user: UserRow) => {
+    console.log("Edit user:", user.id);
+  }, []);
+
+  const handleDelete = useCallback((user: UserRow) => {
+    console.log("Delete user:", user.id);
+  }, []);
+
   const columns = useMemo<GridColDef<UserRow>[]>(() => {
     const companies = [...new Set(users.map((user) => user.company.name))];
     const cities = [...new Set(users.map((user) => user.address.city))];
@@ -77,6 +92,74 @@ export default function Users() {
         valueOptions: cities,
         flex: 1,
         minWidth: 160,
+      },
+      {
+        field: "actions",
+        headerName: "الإجراءات",
+        sortable: false,
+        filterable: false,
+        width: 150,
+        align: "center",
+        headerAlign: "center",
+
+        renderCell: (params) => (
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 0.5,
+              width: "100%",
+              height: "100%",
+            }}
+          >
+            <IconButton
+              sx={{
+                color: "info.main",
+                "&:hover": {
+                  backgroundColor: "accent.light",
+                  color: "primary.dark",
+                },
+              }}
+              size="small"
+              onClick={() => handleView(params.row)}
+            >
+              <VisibilityOutlinedIcon fontSize="small" />
+            </IconButton>
+
+            <Tooltip title="تعديل">
+              <IconButton
+                sx={{
+                  color: "primary.dark",
+                  "&:hover": {
+                    backgroundColor: "primary.light",
+                    color: "#fff",
+                  },
+                }}
+                size="small"
+                onClick={() => handleEdit(params.row)}
+              >
+                <EditOutlinedIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+
+            <Tooltip title="حذف">
+              <IconButton
+                sx={{
+                  color: "secondary.dark",
+                  "&:hover": {
+                    backgroundColor: "secondary.dark",
+                    color: "#fff",
+                  },
+                }}
+                size="small"
+                onClick={() => handleDelete(params.row)}
+              >
+                <DeleteIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+          </Box>
+        ),
       },
     ];
   }, [users]);
