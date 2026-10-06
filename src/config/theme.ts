@@ -28,4 +28,5 @@ export const theme = createTheme({
       contrastText: "#fff",
     },
   },
+  direction: "rtl",
 });

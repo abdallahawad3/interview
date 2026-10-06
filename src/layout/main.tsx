@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { useState } from "react";
 import Sidebar from "../components/shared/sidebar/Sidebar";
-import DataTable from "../components/shared/GenericTable/DataTable";
+import Users from "../pages/Users";
 
 const drawerWidth = 240;
 
@@ -27,7 +27,7 @@ const MainLayout = () => {
           padding: 2,
         }}
       >
-        <DataTable />
+        <Users />
       </Box>
     </Box>
   );
