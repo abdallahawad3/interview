@@ -14,8 +14,6 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import { Typography, useMediaQuery, useTheme } from "@mui/material";
 import { DrawerHeader } from "./SidebarHeader";
 import MainHeader from "../MainHeader/MainHeader";
