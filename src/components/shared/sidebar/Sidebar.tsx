@@ -19,6 +19,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import { Typography, useMediaQuery, useTheme } from "@mui/material";
 import { DrawerHeader } from "./SidebarHeader";
 import MainHeader from "../MainHeader/MainHeader";
+import PeopleIcon from "@mui/icons-material/People";
 function Sidebar({ drawerWidth, handleDrawer, open }: SidebarProps) {
   const theme = useTheme();
 
@@ -85,7 +86,7 @@ function Sidebar({ drawerWidth, handleDrawer, open }: SidebarProps) {
         <Divider />
 
         <List>
-          {["المستخدمين", "المنتجات"].map((text, index) => (
+          {["المستخدمين"].map((text) => (
             <ListItem
               key={text}
               disablePadding
@@ -117,11 +118,7 @@ function Sidebar({ drawerWidth, handleDrawer, open }: SidebarProps) {
                     justifyContent: "center",
                   }}
                 >
-                  {index % 2 === 0 ? (
-                    <InboxIcon sx={{ color: "primary.main" }} />
-                  ) : (
-                    <MailIcon sx={{ color: "primary.main" }} />
-                  )}
+                  <PeopleIcon sx={{ color: "primary.main" }} />
                 </ListItemIcon>
 
                 {/* Menu Text */}

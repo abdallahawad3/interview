@@ -17,7 +17,7 @@ import ViewColumnIcon from "@mui/icons-material/ViewColumnRounded";
 import FilterListIcon from "@mui/icons-material/FilterListRounded";
 import DownloadIcon from "@mui/icons-material/FileDownloadOutlined";
 import EmptyState from "./EmptyState";
-import { type ReactNode } from "react";
+import { memo, type ReactNode } from "react";
 
 type DataTableProps<T extends GridValidRowModel> = {
   rows: T[];
@@ -42,7 +42,7 @@ declare module "@mui/x-data-grid" {
   }
 }
 
-function TableToolbar({
+const TableToolbar = memo(function TableToolbar({
   search,
   onSearch,
 }: {
@@ -117,7 +117,7 @@ function TableToolbar({
       </Tooltip>
     </Toolbar>
   );
-}
+});
 
 const gridSx = (theme: Theme) => {
   const primary = theme.palette.primary.main;
@@ -236,7 +236,7 @@ function DataTable<T extends GridValidRowModel>({
   onRetry,
   title,
   subtitle,
-  height = "calc(100dvh - 48px)",
+  height = "calc(100dvh - 112px)",
   paginationModel,
   onPaginationModelChange,
   onSearch,
@@ -304,16 +304,12 @@ function DataTable<T extends GridValidRowModel>({
         checkboxSelection
         disableRowSelectionOnClick
         disableColumnMenu
-        disableColumnFilter
         slotProps={{ toolbar: { search, onSearch } }}
         rowHeight={56}
         columnHeaderHeight={48}
-        onFilterModelChange={() => {
-          onSearch && onSearch(search || "");
-        }}
         paginationModel={paginationModel}
         onPaginationModelChange={onPaginationModelChange}
-        pageSizeOptions={[5, 10, 25]}
+        pageSizeOptions={[5, 10, 25, 50, 100]}
         showToolbar
         slots={{ toolbar: TableToolbar, noRowsOverlay: EmptyState }}
         localeText={{
