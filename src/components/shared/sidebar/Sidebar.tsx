@@ -16,74 +16,133 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
-import { Typography } from "@mui/material";
+import { Typography, useMediaQuery, useTheme } from "@mui/material";
 import { DrawerHeader } from "./SidebarHeader";
 import MainHeader from "../MainHeader/MainHeader";
-
 function Sidebar({ drawerWidth, handleDrawer, open }: SidebarProps) {
+  const theme = useTheme();
+
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
+  // Mobile أو Sidebar مقفول → mini width
+  const isMini = isSmallScreen || !open;
+
+  const sidebarWidth = isMini ? 72 : drawerWidth;
+
   return (
     <Box>
       <CssBaseline />
-      <MainHeader drawerWidth={drawerWidth} open={open} handleDrawerOpen={handleDrawer} />
+
+      <MainHeader drawerWidth={sidebarWidth} open={open} handleDrawerOpen={handleDrawer} />
+
       <Drawer
+        variant="permanent"
         sx={{
-          width: `${open && drawerWidth}`,
+          width: sidebarWidth,
           flexShrink: 0,
+
           "& .MuiDrawer-paper": {
-            width: drawerWidth,
+            width: sidebarWidth,
             boxSizing: "border-box",
+
+            transition: theme.transitions.create("width", {
+              easing: theme.transitions.easing.sharp,
+              duration: theme.transitions.duration.standard,
+            }),
           },
         }}
-        variant="persistent"
         anchor="right"
-        open={open}
       >
         <DrawerHeader>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <Typography sx={{ fontSize: "18px", fontWeight: "700" }}>Logo</Typography>
-            <Box component={"img"} src="./favicon.svg" width={40} />
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+
+              justifyContent: isMini ? "center" : "flex-start",
+
+              gap: 1,
+              width: "100%",
+            }}
+          >
+            {/* Logo Text */}
+            {!isMini && (
+              <Typography
+                sx={{
+                  fontSize: "18px",
+                  fontWeight: 700,
+                }}
+              >
+                Logo
+              </Typography>
+            )}
+
+            {/* Logo Icon */}
+            <Box component="img" src="./favicon.svg" width={40} />
           </Box>
         </DrawerHeader>
+
         <Divider />
+
         <List>
-          {["المستحدمين", "المنتجات"].map((text, index) => (
+          {["المستخدمين", "المنتجات"].map((text, index) => (
             <ListItem
+              key={text}
+              disablePadding
               sx={{
                 direction: "rtl",
                 borderRadius: "8px",
+
                 transition: "background .2s",
+
                 "&:hover": {
                   backgroundColor: "accent.light",
                   cursor: "pointer",
                 },
               }}
-              key={text}
-              disablePadding
             >
-              <ListItemButton>
-                <ListItemIcon sx={{}}>
+              <ListItemButton
+                sx={{
+                  justifyContent: isMini ? "center" : "initial",
+
+                  minHeight: 48,
+
+                  px: isMini ? 1 : 2,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: isMini ? 0 : 56,
+
+                    justifyContent: "center",
+                  }}
+                >
                   {index % 2 === 0 ? (
                     <InboxIcon sx={{ color: "primary.main" }} />
                   ) : (
                     <MailIcon sx={{ color: "primary.main" }} />
                   )}
                 </ListItemIcon>
-                <ListItemText
-                  sx={{
-                    direction: "rtl",
-                    textAlign: "start",
-                  }}
-                  slotProps={{
-                    primary: {
-                      sx: {
-                        fontSize: "18px",
-                        fontWeight: 700,
-                        color: "primary.main",
+
+                {/* Menu Text */}
+                {!isMini && (
+                  <ListItemText
+                    sx={{
+                      direction: "rtl",
+                      textAlign: "start",
+                    }}
+                    slotProps={{
+                      primary: {
+                        sx: {
+                          fontSize: "18px",
+                          fontWeight: 700,
+                          color: "primary.main",
+                        },
                       },
-                    },
-                  }}
-                  primary={text}
-                />
+                    }}
+                    primary={text}
+                  />
+                )}
               </ListItemButton>
             </ListItem>
           ))}

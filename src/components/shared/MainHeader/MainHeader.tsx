@@ -14,21 +14,14 @@ interface AppBarProps extends MuiAppBarProps {
 }
 
 const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== "open" && prop !== "drawerWidth",
-})<AppBarProps>(({ theme, open, drawerWidth }) => ({
+  shouldForwardProp: (prop) => prop !== "drawerWidth",
+})<AppBarProps>(({ theme, drawerWidth }) => ({
+  width: `calc(100% - ${drawerWidth}px)`,
+  marginRight: drawerWidth,
+
   transition: theme.transitions.create(["margin", "width"], {
     easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-
-  ...(open && {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginRight: drawerWidth,
-
-    transition: theme.transitions.create(["margin", "width"], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
+    duration: theme.transitions.duration.standard,
   }),
 }));
 

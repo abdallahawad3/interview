@@ -5,14 +5,8 @@ import {
   ColumnsPanelTrigger,
   FilterPanelTrigger,
   ExportCsv,
-  GridLogicOperator,
 } from "@mui/x-data-grid";
-import type {
-  GridColDef,
-  GridFilterModel,
-  GridPaginationModel,
-  GridValidRowModel,
-} from "@mui/x-data-grid";
+import type { GridColDef, GridPaginationModel, GridValidRowModel } from "@mui/x-data-grid";
 import { arSD } from "@mui/x-data-grid/locales";
 import { Alert, Box, Button, InputBase, Paper, Tooltip, Typography } from "@mui/material";
 import { alpha, darken, lighten, useTheme } from "@mui/material/styles";
@@ -23,7 +17,22 @@ import ViewColumnIcon from "@mui/icons-material/ViewColumnRounded";
 import FilterListIcon from "@mui/icons-material/FilterListRounded";
 import DownloadIcon from "@mui/icons-material/FileDownloadOutlined";
 import EmptyState from "./EmptyState";
-import { useState, type ReactNode } from "react";
+import { type ReactNode } from "react";
+
+type DataTableProps<T extends GridValidRowModel> = {
+  rows: T[];
+  columns: GridColDef<T>[];
+  loading?: boolean;
+  error?: string | null;
+  onRetry?: () => void;
+  title?: string;
+  subtitle?: string;
+  height?: number | string;
+  paginationModel: GridPaginationModel;
+  onPaginationModelChange: (model: GridPaginationModel) => void;
+  search?: string;
+  onSearch?: (value: string) => void;
+};
 
 declare module "@mui/x-data-grid" {
   interface ToolbarPropsOverrides {
@@ -36,7 +45,6 @@ declare module "@mui/x-data-grid" {
 function TableToolbar({
   search,
   onSearch,
-  filtersSlot,
 }: {
   search: string;
   onSearch: (v: string) => void;
@@ -69,7 +77,7 @@ function TableToolbar({
           border: "1px solid transparent",
           transition: "border-color .15s, background-color .15s, box-shadow .15s",
           "&:focus-within": {
-            bgcolor: "primary.main",
+            bgcolor: "primary.light",
             borderColor: theme.palette.primary.main,
             boxShadow: `0 0 0 3px ${alpha(theme.palette.primary.main, 0.16)}`,
           },
@@ -113,41 +121,68 @@ function TableToolbar({
 
 const gridSx = (theme: Theme) => {
   const primary = theme.palette.primary.main;
+
   const headerBg = theme.palette.mode === "light" ? lighten(primary, 0.92) : darken(primary, 0.7);
 
   return {
     flex: 1,
+    minWidth: 0,
+    minHeight: 0,
+
     border: 0,
+
     fontSize: 14,
     fontFamily: "inherit",
     color: theme.palette.text.primary,
+
     "--DataGrid-t-color-border-base": theme.palette.divider,
 
-    /* Scrollbar on the left: the scroller itself must be RTL */
     direction: "rtl",
-    "& .MuiDataGrid-virtualScroller": { direction: "rtl" },
+
+    "& .MuiDataGrid-virtualScroller": {
+      direction: "rtl",
+    },
 
     /* Header */
     "& .MuiDataGrid-columnHeaders": {
       "--DataGrid-t-header-background-base": headerBg,
     },
+
     "& .MuiDataGrid-columnHeader": {
       bgcolor: headerBg,
-      "&:focus, &:focus-within": { outline: "none" },
-      "&:focus-visible": { outline: `2px solid ${primary}`, outlineOffset: -2 },
+
+      "&:focus, &:focus-within": {
+        outline: "none",
+      },
+
+      "&:focus-visible": {
+        outline: `2px solid ${primary}`,
+        outlineOffset: -2,
+      },
     },
+
     "& .MuiDataGrid-columnHeaderTitle": {
       fontWeight: 600,
       color: theme.palette.text.secondary,
     },
-    "& .MuiDataGrid-columnSeparator": { display: "none" },
+
+    "& .MuiDataGrid-columnSeparator": {
+      display: "none",
+    },
 
     /* Rows */
     "& .MuiDataGrid-row": {
       position: "relative",
       transition: "background-color .12s",
-      "&:hover": { bgcolor: alpha(primary, 0.05) },
-      "&.Mui-selected, &.Mui-selected:hover": { bgcolor: alpha(primary, 0.1) },
+
+      "&:hover": {
+        bgcolor: alpha(primary, 0.05),
+      },
+
+      "&.Mui-selected, &.Mui-selected:hover": {
+        bgcolor: alpha(primary, 0.1),
+      },
+
       "&.Mui-selected::before": {
         content: '""',
         position: "absolute",
@@ -159,11 +194,19 @@ const gridSx = (theme: Theme) => {
         bgcolor: primary,
       },
     },
+
     "& .MuiDataGrid-cell": {
       display: "flex",
       alignItems: "center",
-      "&:focus": { outline: "none" },
-      "&:focus-visible": { outline: `2px solid ${primary}`, outlineOffset: -2 },
+
+      "&:focus": {
+        outline: "none",
+      },
+
+      "&:focus-visible": {
+        outline: `2px solid ${primary}`,
+        outlineOffset: -2,
+      },
     },
 
     /* Footer */
@@ -171,27 +214,18 @@ const gridSx = (theme: Theme) => {
       borderTop: `1px solid ${theme.palette.divider}`,
       minHeight: 56,
     },
+
     "& .MuiTablePagination-root, & .MuiTablePagination-selectLabel, & .MuiTablePagination-displayedRows":
-      { color: theme.palette.text.secondary, fontSize: 13 },
+      {
+        color: theme.palette.text.secondary,
+        fontSize: 13,
+      },
 
-    /* Loading overlay */
-    "& .MuiDataGrid-overlay": { bgcolor: alpha(theme.palette.background.paper, 0.7) },
+    /* Loading */
+    "& .MuiDataGrid-overlay": {
+      bgcolor: alpha(theme.palette.background.paper, 0.7),
+    },
   };
-};
-
-type DataTableProps<T extends GridValidRowModel> = {
-  rows: T[];
-  columns: GridColDef<T>[];
-  loading?: boolean;
-  error?: string | null;
-  onRetry?: () => void;
-  title?: string;
-  subtitle?: string;
-  height?: number | string;
-  paginationModel: GridPaginationModel;
-  onPaginationModelChange: (model: GridPaginationModel) => void;
-  search?: string;
-  onSearch?: (value: string) => void;
 };
 
 function DataTable<T extends GridValidRowModel>({
@@ -208,16 +242,6 @@ function DataTable<T extends GridValidRowModel>({
   onSearch,
   search,
 }: DataTableProps<T>) {
-  const [filterModel, setFilterModel] = useState<{ name: string; value: unknown }[]>([]);
-  const handleFilterModelChange = (model: GridFilterModel) => {
-    setFilterModel(
-      model.items.map((item) => ({
-        name: item.field,
-        value: item.value,
-      })),
-    );
-  };
-
   if (error) {
     return (
       <Alert
@@ -236,7 +260,7 @@ function DataTable<T extends GridValidRowModel>({
       </Alert>
     );
   }
-  console.log(filterModel);
+
   return (
     <Paper
       dir="rtl"
@@ -244,9 +268,13 @@ function DataTable<T extends GridValidRowModel>({
       sx={{
         height,
         width: "100%",
+        maxWidth: "100%",
+        minWidth: 0,
+
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
+
         borderRadius: 4,
         border: 1,
         borderColor: "divider",
@@ -280,12 +308,12 @@ function DataTable<T extends GridValidRowModel>({
         slotProps={{ toolbar: { search, onSearch } }}
         rowHeight={56}
         columnHeaderHeight={48}
-        onFilterModelChange={(model) => {
-          handleFilterModelChange(model);
+        onFilterModelChange={() => {
+          onSearch && onSearch(search || "");
         }}
         paginationModel={paginationModel}
         onPaginationModelChange={onPaginationModelChange}
-        pageSizeOptions={[3, 5, 10, 25]}
+        pageSizeOptions={[5, 10, 25]}
         showToolbar
         slots={{ toolbar: TableToolbar, noRowsOverlay: EmptyState }}
         localeText={{
