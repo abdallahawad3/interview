@@ -18,6 +18,7 @@ import FilterListIcon from "@mui/icons-material/FilterListRounded";
 import DownloadIcon from "@mui/icons-material/FileDownloadOutlined";
 import EmptyState from "./EmptyState";
 import { memo, type ReactNode } from "react";
+import { GridDeleteIcon } from "@mui/x-data-grid";
 
 type DataTableProps<T extends GridValidRowModel> = {
   rows: T[];
@@ -303,15 +304,19 @@ function DataTable<T extends GridValidRowModel>({
         columns={columns}
         checkboxSelection
         disableRowSelectionOnClick
-        disableColumnMenu
-        slotProps={{ toolbar: { search, onSearch } }}
+        slotProps={{
+          toolbar: { search, onSearch },
+        }}
         rowHeight={56}
         columnHeaderHeight={48}
         paginationModel={paginationModel}
         onPaginationModelChange={onPaginationModelChange}
         pageSizeOptions={[5, 10, 25, 50, 100]}
         showToolbar
-        slots={{ toolbar: TableToolbar, noRowsOverlay: EmptyState }}
+        slots={{
+          toolbar: TableToolbar,
+          noRowsOverlay: EmptyState,
+        }}
         localeText={{
           ...arSD.components.MuiDataGrid.defaultProps.localeText,
           paginationRowsPerPage: "عدد الصفوف",

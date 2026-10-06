@@ -5,11 +5,16 @@ import DataTable from "../components/shared/GenericTable/DataTable";
 import { getUsers } from "../api/user";
 
 import { useDebounced } from "../hooks/useDebounced";
-import { type GridColDef, type GridPaginationModel } from "@mui/x-data-grid";
-import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import {
+  getGridStringOperators,
+  type GridColDef,
+  type GridPaginationModel,
+} from "@mui/x-data-grid";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Box, IconButton, Tooltip } from "@mui/material";
+import UserModel from "../components/shared/models/UserModel";
 export default function Users() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -20,23 +25,18 @@ export default function Users() {
     pageSize: 5,
   });
   const [search, setSearch] = useState<string>("");
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    const controller = new AbortController();
-    void getUsers(controller.signal)
+    void getUsers()
       .then(setUsers)
       .catch(() => {
-        if (!controller.signal.aborted) {
-          setError("حدث خطأ أثناء تحميل المستخدمين");
-        }
+        setError("حدث خطأ أثناء تحميل المستخدمين");
       })
       .finally(() => {
-        if (!controller.signal.aborted) {
-          setLoading(false);
-        }
+        setLoading(false);
       });
-
-    return () => controller.abort();
   }, [retryCount]);
 
   const debouncedSearch = useDebounced(search, 500);
@@ -54,9 +54,13 @@ export default function Users() {
     return matchingUsers.map(transformUser);
   }, [debouncedSearch, users]);
 
-  const handleView = useCallback((user: UserRow) => {
-    console.log("View user:", user.id);
-  }, []);
+  const handleView = useCallback(
+    (user: UserRow) => {
+      setIsModalOpen(true);
+      setSelectedUser(users.find((u) => u.id === user.id) || null);
+    },
+    [users],
+  );
 
   const handleEdit = useCallback((user: UserRow) => {
     console.log("Edit user:", user.id);
@@ -66,13 +70,24 @@ export default function Users() {
     console.log("Delete user:", user.id);
   }, []);
 
+  const handleClose = useCallback(() => {
+    setIsModalOpen(false);
+    setSelectedUser(null);
+  }, []);
+
   const columns = useMemo<GridColDef<UserRow>[]>(() => {
     const companies = [...new Set(users.map((user) => user.company.name))];
     const cities = [...new Set(users.map((user) => user.address.city))];
 
     return [
       { field: "id", headerName: "ID", width: 100 },
-      { field: "name", headerName: "الاسم", flex: 1, minWidth: 150 },
+      {
+        field: "name",
+        headerName: "الاسم",
+        flex: 1,
+        minWidth: 150,
+        filterOperators: getGridStringOperators(),
+      },
       { field: "username", headerName: "اسم المستخدم", flex: 1, minWidth: 160 },
       { field: "email", headerName: "البريد الإلكتروني", flex: 1, minWidth: 240 },
       { field: "phone", headerName: "الهاتف", flex: 1, minWidth: 170 },
@@ -121,8 +136,10 @@ export default function Users() {
                   color: "primary.dark",
                 },
               }}
+              onClick={() => {
+                handleView(params.row);
+              }}
               size="small"
-              onClick={() => handleView(params.row)}
             >
               <VisibilityOutlinedIcon fontSize="small" />
             </IconButton>
@@ -176,16 +193,19 @@ export default function Users() {
   }, []);
 
   return (
-    <DataTable
-      rows={rows}
-      columns={columns}
-      loading={loading}
-      error={error}
-      onRetry={handleRetry}
-      paginationModel={paginationModel}
-      onPaginationModelChange={setPaginationModel}
-      search={search}
-      onSearch={handleSearchChange}
-    />
+    <>
+      <DataTable
+        rows={rows}
+        columns={columns}
+        loading={loading}
+        error={error}
+        onRetry={handleRetry}
+        paginationModel={paginationModel}
+        onPaginationModelChange={setPaginationModel}
+        search={search}
+        onSearch={handleSearchChange}
+      />
+      <UserModel isOpen={isModalOpen} onClose={handleClose} user={selectedUser} />
+    </>
   );
 }
