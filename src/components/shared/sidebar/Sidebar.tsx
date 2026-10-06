@@ -16,8 +16,8 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { Typography, useMediaQuery, useTheme } from "@mui/material";
 import { DrawerHeader } from "./SidebarHeader";
-import MainHeader from "../MainHeader/MainHeader";
 import PeopleIcon from "@mui/icons-material/People";
+import MainHeader from "../MainHeader/MainHeader";
 function Sidebar({ drawerWidth, handleDrawer, open }: SidebarProps) {
   const theme = useTheme();
 
