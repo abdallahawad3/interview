@@ -30,11 +30,11 @@ function ColumnFilterFieldInner<T>({ column, filter, options, onChange }: Props<
   }, [debounced]);
 
   return (
-    <Stack direction="row" spacing={1} sx={{ minWidth: 0 }}>
+    <Stack direction="row" spacing={1} sx={{ minWidth: 0, gap: 1, direction: "rtl" }}>
       <TextField
         select
         size="small"
-        label={`${column.header} rule`}
+        label={`${column.header} (${isSelect ? "تصفية حسب" : "بحث في"})`}
         value={filter.operator}
         onChange={(e) =>
           onChange(column.id, { ...filter, operator: e.target.value as FilterOperator })
@@ -57,7 +57,7 @@ function ColumnFilterFieldInner<T>({ column, filter, options, onChange }: Props<
           value={filter.value}
           onChange={(e) => onChange(column.id, { ...filter, value: e.target.value })}
         >
-          <MenuItem value="">All</MenuItem>
+          <MenuItem value="">الكل</MenuItem>
           {options.map((o) => (
             <MenuItem key={o} value={o}>
               {o}

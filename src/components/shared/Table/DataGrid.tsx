@@ -201,7 +201,15 @@ export function DataGrid<T>({
 
   return (
     <Paper variant="outlined" sx={{ direction: "rtl" }}>
-      <Toolbar sx={{ gap: 1, flexWrap: "wrap", py: 1.5 }}>
+      <Toolbar
+        sx={{
+          gap: 1,
+          flexWrap: "wrap",
+          py: 1.5,
+          mb: 1,
+          border: "1px solid #e0e0e0",
+        }}
+      >
         {title && (
           <Typography variant="h6" sx={{ mr: "auto" }}>
             {title}

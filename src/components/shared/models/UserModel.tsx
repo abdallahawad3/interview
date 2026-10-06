@@ -30,7 +30,14 @@ type IProps = {
 function InfoItem({ label, value }: { label: string; value: string | number }) {
   return (
     <Box>
-      <Typography variant="caption" color="text.secondary" sx={{ display: "block", mb: 0.5 }}>
+      <Typography
+        variant="caption"
+        color="text.secondary"
+        sx={{
+          display: "block",
+          mb: 0.5,
+        }}
+      >
         {label}
       </Typography>
 
@@ -47,7 +54,7 @@ export default function UserModel({ isOpen, onClose, user }: IProps) {
   return (
     <BootstrapDialog
       sx={{
-        direction: "ltr",
+        direction: "rtl",
       }}
       onClose={onClose}
       aria-labelledby="user-dialog-title"
@@ -63,15 +70,15 @@ export default function UserModel({ isOpen, onClose, user }: IProps) {
         }}
         id="user-dialog-title"
       >
-        User Details
+        تفاصيل المستخدم
       </DialogTitle>
 
       <IconButton
-        aria-label="close"
+        aria-label="إغلاق"
         onClick={onClose}
         sx={(theme) => ({
           position: "absolute",
-          right: 8,
+          left: 8,
           top: 8,
           color: theme.palette.grey[500],
         })}
@@ -81,7 +88,7 @@ export default function UserModel({ isOpen, onClose, user }: IProps) {
 
       <DialogContent dividers>
         <Typography variant="h6" sx={{ mb: 2, fontWeight: 700 }}>
-          Basic Information
+          المعلومات الأساسية
         </Typography>
 
         <Box
@@ -94,19 +101,18 @@ export default function UserModel({ isOpen, onClose, user }: IProps) {
             gap: 3,
           }}
         >
-          <InfoItem label="ID" value={user.id} />
-          <InfoItem label="Name" value={user.name} />
-          <InfoItem label="Username" value={user.username} />
-          <InfoItem label="Email" value={user.email} />
-          <InfoItem label="Phone" value={user.phone} />
-          <InfoItem label="Website" value={user.website} />
+          <InfoItem label="المعرّف" value={user.id} />
+          <InfoItem label="الاسم" value={user.name} />
+          <InfoItem label="اسم المستخدم" value={user.username} />
+          <InfoItem label="البريد الإلكتروني" value={user.email} />
+          <InfoItem label="رقم الهاتف" value={user.phone} />
+          <InfoItem label="الموقع الإلكتروني" value={user.website} />
         </Box>
 
         <Divider sx={{ my: 3 }} />
 
-        {/* Address */}
         <Typography variant="h6" sx={{ mb: 2, fontWeight: 700 }}>
-          Address
+          العنوان
         </Typography>
 
         <Box
@@ -119,19 +125,18 @@ export default function UserModel({ isOpen, onClose, user }: IProps) {
             gap: 3,
           }}
         >
-          <InfoItem label="Street" value={user.address.street} />
-          <InfoItem label="Suite" value={user.address.suite} />
-          <InfoItem label="City" value={user.address.city} />
-          <InfoItem label="Zipcode" value={user.address.zipcode} />
-          <InfoItem label="Latitude" value={user.address.geo.lat} />
-          <InfoItem label="Longitude" value={user.address.geo.lng} />
+          <InfoItem label="الشارع" value={user.address.street} />
+          <InfoItem label="الوحدة" value={user.address.suite} />
+          <InfoItem label="المدينة" value={user.address.city} />
+          <InfoItem label="الرمز البريدي" value={user.address.zipcode} />
+          <InfoItem label="خط العرض" value={user.address.geo.lat} />
+          <InfoItem label="خط الطول" value={user.address.geo.lng} />
         </Box>
 
         <Divider sx={{ my: 3 }} />
 
-        {/* Company */}
         <Typography variant="h6" sx={{ mb: 2, fontWeight: 700 }}>
-          Company
+          الشركة
         </Typography>
 
         <Box
@@ -144,16 +149,16 @@ export default function UserModel({ isOpen, onClose, user }: IProps) {
             gap: 3,
           }}
         >
-          <InfoItem label="Company Name" value={user.company.name} />
+          <InfoItem label="اسم الشركة" value={user.company.name} />
 
-          <InfoItem label="Catch Phrase" value={user.company.catchPhrase} />
+          <InfoItem label="الشعار" value={user.company.catchPhrase} />
 
-          <InfoItem label="Business" value={user.company.bs} />
+          <InfoItem label="مجال العمل" value={user.company.bs} />
         </Box>
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={onClose}>Close</Button>
+        <Button onClick={onClose}>إغلاق</Button>
       </DialogActions>
     </BootstrapDialog>
   );
