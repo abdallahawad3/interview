@@ -60,27 +60,22 @@ export function DataGrid<T>({
 }: DataGridProps<T>) {
   const [params, setParams] = useUrlParams();
 
-  // ---- state kept in the URL ----
   const urlSearch = params.get("q") ?? "";
   const urlPageSize = Number(params.get("pageSize"));
   const pageSize = PAGE_SIZES.includes(urlPageSize) ? urlPageSize : PAGE_SIZES[0];
   const rawPage = Math.max(0, Number(params.get("page")) || 0);
 
-  // ---- local state ----
   const [searchInput, setSearchInput] = useState(urlSearch);
   const debouncedSearch = useDebounce(searchInput, 300);
   const [filters, setFilters] = useState<FiltersState>({});
-  const [filtersKey, setFiltersKey] = useState(0); // remounts filter inputs on "clear"
+  const [filtersKey, setFiltersKey] = useState(0);
   const [showFilters, setShowFilters] = useState(false);
   const [selected, setSelected] = useState<Set<RowId>>(() => new Set());
 
-  // sync debounced search -> URL (and reset page)
   useEffect(() => {
     if (debouncedSearch !== urlSearch) setParams({ q: debouncedSearch, page: null });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearch]);
 
-  // ---- derived data ----
   const filterableColumns = useMemo(() => columns.filter((c) => c.filter), [columns]);
 
   const selectOptions = useMemo(() => {
@@ -108,8 +103,8 @@ export function DataGrid<T>({
     () => filtered.slice(page * pageSize, page * pageSize + pageSize),
     [filtered, page, pageSize],
   );
-  const pageIds = useMemo(() => pageRows.map(getRowId), [pageRows, getRowId]);
 
+  const pageIds = useMemo(() => pageRows.map(getRowId), [pageRows, getRowId]);
   const selectedOnPage = pageIds.filter((id) => selected.has(id)).length;
   const allSelected = pageIds.length > 0 && selectedOnPage === pageIds.length;
   const someSelected = selectedOnPage > 0 && !allSelected;
@@ -119,7 +114,6 @@ export function DataGrid<T>({
     [filters],
   );
 
-  // ---- handlers (stable references) ----
   const handleFilterChange = useCallback(
     (columnId: string, value: FilterValue) => {
       setFilters((prev) => ({ ...prev, [columnId]: value }));
@@ -164,6 +158,7 @@ export function DataGrid<T>({
 
   const hasData = !!rows && rows.length > 0;
   let body;
+
   if (loading) {
     body = <DataGridSkeleton columns={columns.length} />;
   } else if (error) {
@@ -296,13 +291,13 @@ export function DataGrid<T>({
             disabled={activeFilterCount === 0}
             onClick={handleClearFilters}
           >
-            Clear filters
+            مسح الفلاتر
           </Button>
         </Box>
       </Collapse>
 
       <TableContainer sx={{ maxHeight: "65vh" }}>
-        <Table stickyHeader size="small">
+        <Table stickyHeader size="medium">
           <TableHead>
             <TableRow>
               <TableCell padding="checkbox" sx={{ bgcolor: "#eef2ff" }}>

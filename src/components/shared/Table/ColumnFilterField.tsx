@@ -1,17 +1,17 @@
 import { memo, useEffect, useState } from "react";
 import { MenuItem, Stack, TextField } from "@mui/material";
 import {
-  SELECT_OPERATORS,
-  TEXT_OPERATORS,
+  SELECT_OPERATORS, // "equals" | "notEquals"
+  TEXT_OPERATORS, // "contains" | "equals" | "notEquals" | "startsWith" | "endsWith"
   type DataGridColumn,
-  type FilterOperator,
-  type FilterValue,
+  type FilterOperator, // "contains" | "equals" | "notEquals" | "startsWith" | "endsWith"
+  type FilterValue, // {operator: FilterOperator, value: string}
 } from "./types";
 import { useDebounce } from "../../../hooks/useDebounced";
 
 interface Props<T> {
   column: DataGridColumn<T>;
-  filter: FilterValue;
+  filter: FilterValue; // {operator: FilterOperator, value: string}
   options: string[];
   onChange: (columnId: string, value: FilterValue) => void;
 }
@@ -26,7 +26,6 @@ function ColumnFilterFieldInner<T>({ column, filter, options, onChange }: Props<
     if (!isSelect && debounced !== filter.value) {
       onChange(column.id, { ...filter, value: debounced });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounced]);
 
   return (

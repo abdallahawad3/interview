@@ -2,7 +2,7 @@ import type { DataGridColumn, FiltersState, FilterValue } from "../components/sh
 
 const norm = (v: string | number) => String(v).toLowerCase().trim();
 
-export function matchesFilter(cell: string | number, { operator, value }: FilterValue): boolean {
+function matchesFilter(cell: string | number, { operator, value }: FilterValue): boolean {
   const c = norm(cell);
   const v = norm(value);
   switch (operator) {
@@ -27,6 +27,7 @@ export function applyGridFilters<T>(
 ): T[] {
   const q = norm(search);
   const searchCols = columns.filter((c) => c.searchable);
+
   const activeFilters = columns
     .map((col) => ({ col, f: filters[col.id] }))
     .filter(({ f }) => f && f.value !== "");
